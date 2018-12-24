@@ -1,7 +1,6 @@
 import requests
-from enum import IntEnum
 
-class N2YOSatelliteCategory(IntEnum):
+class N2YOSatelliteCategory:
     All = 0
     Amateur = 18
     Beidou = 35
