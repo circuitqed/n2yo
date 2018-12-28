@@ -177,7 +177,12 @@ class N2YO:
                          params=self.params).json()
         self.transactionscount = r['info']['transactionscount']
 
-        return r['info'], r['passes']
+        if 'passes' in r.keys():
+            passes=r['passes']
+        else:
+            passes=[]
+
+        return r['info'], passes
 
     def get_radiopasses(self, id, days, min_elevation, lat=None, lon=None, alt=None):
         """
@@ -219,7 +224,12 @@ class N2YO:
                          params=self.params).json()
         self.transactionscount = r['info']['transactionscount']
 
-        return r['info'], r['passes']
+        if 'passes' in r.keys():
+            passes=r['passes']
+        else:
+            passes=[]
+
+        return r['info'], passes
 
     def get_above(self, search_radius=90, category_id=N2YOSatelliteCategory.All, lat=None, lon=None, alt=None ):
         """
@@ -260,7 +270,7 @@ class N2YO:
         if 'above' in r.keys():
             above=r['above']
         else:
-            above=None
+            above=[]
 
         return r['info'],above
 
