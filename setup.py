@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="n2yo",
-    version="0.0.4",
+    version="0.0.5",
     author="David Schuster",
     author_email="David.Schuster@gmail.com",
     description="Python wrapper for the N2YO API",
