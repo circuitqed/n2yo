@@ -84,7 +84,7 @@ class N2YO:
         tle	                string	TLE on single line string. Split the line in two by \r\n to get original two lines
         """
         r = requests.get(
-            N2YO.API_URL + "tle/%d" % id,
+            f'{N2YO.API_URL}tle/{id}',
             params=self.params
         ).json()
         self.transactionscount = r['info']['transactionscount']
@@ -125,9 +125,7 @@ class N2YO:
             alt = self.alt
 
         r = requests.get(
-            N2YO.API_URL + "positions/%d/%f/%f/%f/%d" % (
-                id, lat, lon, alt, seconds
-            )
+            f'{N2YO.API_URL}positions/{id}/{lat}/{lon}/{alt}/{seconds}',
         ).json()
         self.transactionscount = r['info']['transactionscount']
 
@@ -200,9 +198,7 @@ class N2YO:
             alt = self.alt
 
         r = requests.get(
-            N2YO.API_URL + "visualpasses/%d/%f/%f/%f/%d/%d" % (
-                id, lat, lon, alt, days, min_visibility
-            ),
+            f'{N2YO.API_URL}visualpasses/{id}/{lat}/{lon}/{alt}/{days}/{min_visibility}',
             params=self.params
         ).json()
         self.transactionscount = r['info']['transactionscount']
@@ -256,9 +252,7 @@ class N2YO:
             alt = self.alt
 
         r = requests.get(
-            N2YO.API_URL + "radiopasses/%d/%f/%f/%f/%d/%d" % (
-                id, lat, lon, alt, days, min_elevation
-            ),
+            f'{N2YO.API_URL}radiopasses/{id}/{lat}/{lon}/{alt}/{days}/{min_elevation}',
             params=self.params
         ).json()
         self.transactionscount = r['info']['transactionscount']
@@ -313,9 +307,7 @@ class N2YO:
             alt = self.alt
 
         r = requests.get(
-            N2YO.API_URL + "above/%f/%f/%f/%d/%d" % (
-                lat, lon, alt, search_radius, category_id
-            ),
+            f'{N2YO.API_URL}above/{lat}/{lon}/{alt}/{search_radius}/{category_id}',
             params=self.params
         ).json()
         self.transactionscount = r['info']['transactionscount']
