@@ -56,7 +56,7 @@ class N2YOSatelliteCategory:
 
 
 class N2YO:
-    API_URL = "https://www.n2yo.com/rest/v1/satellite/"
+    API_URL = 'https://www.n2yo.com/rest/v1/satellite/'
 
     def __init__(self, apikey, lat=None, lon=None, alt=None):
         self.apikey = apikey
@@ -64,10 +64,10 @@ class N2YO:
         self.lon = lon
         self.alt = alt
         self.transactionscount = 0
-        self.params = {"apiKey": self.apikey}
+        self.params = {'apiKey': self.apikey}
 
     def get_TLE(self, id):
-        """
+        '''
         Retrieve the Two Line Elements (TLE) for a satellite identified by NORAD id.
 
         Request: /tle/{id}
@@ -82,7 +82,7 @@ class N2YO:
         satname	            string	Satellite name
         transactionscount	integer	Count of transactions performed with this API key in last 60 minutes
         tle	                string	TLE on single line string. Split the line in two by \r\n to get original two lines
-        """
+        '''
         r = requests.get(
             f'{N2YO.API_URL}tle/{id}',
             params=self.params
@@ -91,7 +91,7 @@ class N2YO:
         return r['info'], r['tle']
 
     def get_positions(self, id, seconds, lat=None, lon=None, alt=None):
-        """
+        '''
         Retrieve the future positions of any satellite as footprints (latitude, longitude) to display orbits on maps. Also return the satellite's azimuth and elevation with respect to the observer location. Each element in the response array is one second of calculation. First element is calculated for current UTC time.
 
         Request: /positions/{id}/{observer_lat}/{observer_lng}/{observer_alt}/{seconds}
@@ -116,7 +116,7 @@ class N2YO:
         ra	                float	Satellite right angle (degrees)
         dec	                float	Satellite declination (degrees)
         timestamp	        integer	Unix time for this position (seconds). You should convert this UTC value to observer's time zone
-        """
+        '''
         if lat is None:
             lat = self.lat
         if lon is None:
@@ -155,8 +155,8 @@ class N2YO:
     def get_visualpasses(
         self, id, days, min_visibility, lat=None, lon=None, alt=None
     ):
-        """
-        Get predicted visual passes for any satellite relative to a location on Earth. A "visual pass" is a pass that should be optically visible on the entire (or partial) duration of crossing the sky. For that to happen, the satellite must be above the horizon, illumintaed by Sun (not in Earth shadow), and the sky dark enough to allow visual satellite observation.
+        '''
+        Get predicted visual passes for any satellite relative to a location on Earth. A 'visual pass' is a pass that should be optically visible on the entire (or partial) duration of crossing the sky. For that to happen, the satellite must be above the horizon, illumintaed by Sun (not in Earth shadow), and the sky dark enough to allow visual satellite observation.
 
         Request: /visualpasses/{id}/{observer_lat}/{observer_lng}/{observer_alt}/{days}/{min_visibility}
 
@@ -189,7 +189,7 @@ class N2YO:
         endUTC	            integer	Unix time for the end of this pass. You should convert this UTC value to observer's time zone
         mag	                float	Max visual magnitude of the pass, same scale as star brightness. If magnitude cannot be determined, the value is 100000
         duration	        integer	Total visible duration of this pass (in seconds)
-        """
+        '''
         if lat is None:
             lat = self.lat
         if lon is None:
@@ -213,8 +213,8 @@ class N2YO:
     def get_radiopasses(
         self, id, days, min_elevation, lat=None, lon=None, alt=None
     ):
-        """
-        The "radio passes" are similar to "visual passes", the only difference being the requirement for the objects to be optically visible for observers. This function is useful mainly for predicting satellite passes to be used for radio communications. The quality of the pass depends essentially on the highest elevation value during the pass, which is one of the input parameters.
+        '''
+        The 'radio passes' are similar to 'visual passes', the only difference being the requirement for the objects to be optically visible for observers. This function is useful mainly for predicting satellite passes to be used for radio communications. The quality of the pass depends essentially on the highest elevation value during the pass, which is one of the input parameters.
 
         Request: /radiopasses/{id}/{observer_lat}/{observer_lng}/{observer_alt}/{days}/{min_elevation}
 
@@ -243,7 +243,7 @@ class N2YO:
         endAz	            float	Satellite azimuth for the end of this pass (relative to the observer, in degrees)
         endAzCompass	    string	Satellite azimuth for the end of this pass (relative to the observer). Possible values: N, NE, E, SE, S, SW, W, NW
         endUTC	            integer	Unix time for the end of this pass. You should convert this UTC value to observer's time zone
-        """
+        '''
         if lat is None:
             lat = self.lat
         if lon is None:
@@ -271,8 +271,8 @@ class N2YO:
         lat=None, lon=None,
         alt=None
     ):
-        """
-        The "above" function will return all objects within a given search radius above observer's location. The radius (θ), expressed in degrees, is measured relative to the point in the sky directly above an observer (azimuth).
+        '''
+        The 'above' function will return all objects within a given search radius above observer's location. The radius (θ), expressed in degrees, is measured relative to the point in the sky directly above an observer (azimuth).
 
         Request: /above/{observer_lat}/{observer_lng}/{observer_alt}/{search_radius}/{category_id}
 
@@ -298,7 +298,7 @@ class N2YO:
         satlat	            float	Satellite footprint longitude (decimal degrees format)
         satlat	            float	Satellite altitude (km)
 
-        """
+        '''
         if lat is None:
             lat = self.lat
         if lon is None:
