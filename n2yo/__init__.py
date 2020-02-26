@@ -1,5 +1,6 @@
 import requests
 
+
 class N2YOSatelliteCategory:
     All = 0
     Amateur = 18
@@ -9,8 +10,8 @@ class N2YOSatelliteCategory:
     CubeSats = 32
     Disaster = 8
     Earth = 6
-    Education= 29
-    Engineering =28
+    Education = 29
+    Engineering = 28
     Experimental = 19
     Flock = 48
     Galileo = 22
@@ -28,7 +29,7 @@ class N2YOSatelliteCategory:
     IRNSS = 46
     ISS = 2
     Lemur = 49
-    Military =30
+    Military = 30
     Molniya = 14
     NavyNavigation = 24
     NOAA = 4
@@ -40,7 +41,7 @@ class N2YOSatelliteCategory:
     Raduga = 13
     RussianLEONavigation = 25
     SatelliteAugmentationSystem = 23
-    SearchRescue= 7
+    SearchRescue = 7
     SpaceEarthScience = 26
     Strela = 39
     TrackingDataRelaySystemSatellite = 9
@@ -52,6 +53,7 @@ class N2YOSatelliteCategory:
     WestfordNeedles = 37
     XMSirius = 33
     Yaogan = 36
+
 
 class N2YO:
     API_URL = "https://www.n2yo.com/rest/v1/satellite/"
@@ -81,7 +83,10 @@ class N2YO:
         transactionscount	integer	Count of transactions performed with this API key in last 60 minutes
         tle	                string	TLE on single line string. Split the line in two by \r\n to get original two lines
         """
-        r = requests.get(N2YO.API_URL + "tle/%d" % id, params=self.params).json()
+        r = requests.get(
+            N2YO.API_URL + "tle/%d" % id,
+            params=self.params
+        ).json()
         self.transactionscount = r['info']['transactionscount']
         return r['info'], r['tle']
 
@@ -112,11 +117,18 @@ class N2YO:
         dec	                float	Satellite declination (degrees)
         timestamp	        integer	Unix time for this position (seconds). You should convert this UTC value to observer's time zone
         """
-        if lat is None: lat = self.lat
-        if lon is None: lon = self.lon
-        if alt is None: alt = self.alt
+        if lat is None:
+            lat = self.lat
+        if lon is None:
+            lon = self.lon
+        if alt is None:
+            alt = self.alt
 
-        r = requests.get(N2YO.API_URL + "positions/%d/%f/%f/%f/%d" % (id, lat, lon, alt, seconds)).json()
+        r = requests.get(
+            N2YO.API_URL + "positions/%d/%f/%f/%f/%d" % (
+                id, lat, lon, alt, seconds
+            )
+        ).json()
         self.transactionscount = r['info']['transactionscount']
 
         positions = []
@@ -124,16 +136,27 @@ class N2YO:
         radecs = []
         timestamps = []
         for ii, pos in enumerate(r['positions']):
-            positions.append([pos['satlatitude'], pos['satlongitude'], pos['satlaltitude']])
+            positions.append([
+                pos['satlatitude'],
+                pos['satlongitude'],
+                pos['satlaltitude']
+            ])
             azels.append([pos['azimuth'], pos['elevation']])
             radecs.append([pos['ra'], pos['dec']])
             timestamps.append(pos['timestamp'])
 
-        ans = {'timestamps': timestamps, 'positions': positions, 'azels': azels, 'radecs': radecs}
+        ans = {
+            'timestamps': timestamps,
+            'positions': positions,
+            'azels': azels,
+            'radecs': radecs
+        }
 
         return r['info'], ans
 
-    def get_visualpasses(self, id, days, min_visibility, lat=None, lon=None, alt=None):
+    def get_visualpasses(
+        self, id, days, min_visibility, lat=None, lon=None, alt=None
+    ):
         """
         Get predicted visual passes for any satellite relative to a location on Earth. A "visual pass" is a pass that should be optically visible on the entire (or partial) duration of crossing the sky. For that to happen, the satellite must be above the horizon, illumintaed by Sun (not in Earth shadow), and the sky dark enough to allow visual satellite observation.
 
@@ -169,22 +192,31 @@ class N2YO:
         mag	                float	Max visual magnitude of the pass, same scale as star brightness. If magnitude cannot be determined, the value is 100000
         duration	        integer	Total visible duration of this pass (in seconds)
         """
-        if lat is None: lat = self.lat
-        if lon is None: lon = self.lon
-        if alt is None: alt = self.alt
+        if lat is None:
+            lat = self.lat
+        if lon is None:
+            lon = self.lon
+        if alt is None:
+            alt = self.alt
 
-        r = requests.get(N2YO.API_URL + "visualpasses/%d/%f/%f/%f/%d/%d" % (id, lat, lon, alt, days, min_visibility),
-                         params=self.params).json()
+        r = requests.get(
+            N2YO.API_URL + "visualpasses/%d/%f/%f/%f/%d/%d" % (
+                id, lat, lon, alt, days, min_visibility
+            ),
+            params=self.params
+        ).json()
         self.transactionscount = r['info']['transactionscount']
 
         if 'passes' in r.keys():
-            passes=r['passes']
+            passes = r['passes']
         else:
-            passes=[]
+            passes = []
 
         return r['info'], passes
 
-    def get_radiopasses(self, id, days, min_elevation, lat=None, lon=None, alt=None):
+    def get_radiopasses(
+        self, id, days, min_elevation, lat=None, lon=None, alt=None
+    ):
         """
         The "radio passes" are similar to "visual passes", the only difference being the requirement for the objects to be optically visible for observers. This function is useful mainly for predicting satellite passes to be used for radio communications. The quality of the pass depends essentially on the highest elevation value during the pass, which is one of the input parameters.
 
@@ -216,22 +248,35 @@ class N2YO:
         endAzCompass	    string	Satellite azimuth for the end of this pass (relative to the observer). Possible values: N, NE, E, SE, S, SW, W, NW
         endUTC	            integer	Unix time for the end of this pass. You should convert this UTC value to observer's time zone
         """
-        if lat is None: lat = self.lat
-        if lon is None: lon = self.lon
-        if alt is None: alt = self.alt
+        if lat is None:
+            lat = self.lat
+        if lon is None:
+            lon = self.lon
+        if alt is None:
+            alt = self.alt
 
-        r = requests.get(N2YO.API_URL + "radiopasses/%d/%f/%f/%f/%d/%d" % (id, lat, lon, alt, days, min_elevation),
-                         params=self.params).json()
+        r = requests.get(
+            N2YO.API_URL + "radiopasses/%d/%f/%f/%f/%d/%d" % (
+                id, lat, lon, alt, days, min_elevation
+            ),
+            params=self.params
+        ).json()
         self.transactionscount = r['info']['transactionscount']
 
         if 'passes' in r.keys():
-            passes=r['passes']
+            passes = r['passes']
         else:
-            passes=[]
+            passes = []
 
         return r['info'], passes
 
-    def get_above(self, search_radius=90, category_id=N2YOSatelliteCategory.All, lat=None, lon=None, alt=None ):
+    def get_above(
+        self,
+        search_radius=90,
+        category_id=N2YOSatelliteCategory.All,
+        lat=None, lon=None,
+        alt=None
+    ):
         """
         The "above" function will return all objects within a given search radius above observer's location. The radius (θ), expressed in degrees, is measured relative to the point in the sky directly above an observer (azimuth).
 
@@ -260,17 +305,23 @@ class N2YO:
         satlat	            float	Satellite altitude (km)
 
         """
-        if lat is None: lat = self.lat
-        if lon is None: lon = self.lon
-        if alt is None: alt = self.alt
+        if lat is None:
+            lat = self.lat
+        if lon is None:
+            lon = self.lon
+        if alt is None:
+            alt = self.alt
 
-        r = requests.get(N2YO.API_URL + "above/%f/%f/%f/%d/%d" % (lat, lon, alt, search_radius, category_id),
-                         params=self.params).json()
+        r = requests.get(
+            N2YO.API_URL + "above/%f/%f/%f/%d/%d" % (
+                lat, lon, alt, search_radius, category_id
+            ),
+            params=self.params
+        ).json()
         self.transactionscount = r['info']['transactionscount']
         if 'above' in r.keys():
-            above=r['above']
+            above = r['above']
         else:
-            above=[]
+            above = []
 
-        return r['info'],above
-
+        return r['info'], above
